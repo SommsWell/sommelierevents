@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sommeliers events: een collectief van 5 wijn en spirtis handelaars</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Slider */
+        .slider {
+            position: relative;
+            height: 60vh;
+            overflow: hidden;
+        }
+
+        .slides {
+            width: 500%;
+            height: 100%;
+            display: flex;
+            animation: slide 15s infinite;
+        }
+
+        .slide {
+            width: 20%;
+            transition: 0.5s;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @keyframes slide {
+            0% { margin-left: 0; }
+            20% { margin-left: 0; }
+            25% { margin-left: -100%; }
+            45% { margin-left: -100%; }
+            50% { margin-left: -200%; }
+            70% { margin-left: -200%; }
+            75% { margin-left: -300%; }
+            95% { margin-left: -300%; }
+            100% { margin-left: -400%; }
+        }
+
+        /* Logos Section */
+        .logos {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo-item img {
+            max-width: 150px;
+            transition: transform 0.3s;
+        }
+
+        .logo-item img:hover {
+            transform: scale(1.1);
+        }
+
+        /* Catalog */
+        .catalog {
+            padding: 40px;
+            text-align: center;
+        }
+
+        .booklet {
+            width: 80%;
+            margin: 0 auto;
+            aspect-ratio: 1.414 / 1;
+            background: #fff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .booklet iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Map */
+        .map-section {
+            padding: 40px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        #world-map {
+            width: 100%;
+            height: 500px;
+            background: #333;
+        }
+
+        .map-legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .map-legend img {
+            width: 50px;
+            cursor: pointer;
+        }
+
+        /* Contact */
+        .contact {
+            padding: 40px;
+            background: #fff;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="slider">
+            <div class="slides">
+                <div class="slide"><img src="https://raw.githubusercontent.com/SommsWell/sommelierevents/main/images/slide1.jpg" alt="Wijn 1"></div>
+                <div class="slide"><img src="https://raw.githubusercontent.com/SommsWell/sommelierevents/main/images/slide2.jpg" alt="Wijn 2"></div>
+                <div class="slide"><img src="https://raw.githubusercontent.com/SommsWell/sommelierevents/main/images/slide3.jpg" alt="Wijn 3"></div>
+                <div class="slide"><img src="https://raw.githubusercontent.com/SommsWell/sommelierevents/main/images/slide4.jpg" alt="Wijn 4"></div>
+                <div class="slide"><img src="https://raw.githubusercontent.com/SommsWell/sommelierevents/main/images/slide5.jpg" alt="Wijn 5"></div>
+            </div>
+        </div>
+    </header>
+
+    <section class="logos">
+        <div class="logo-item"><a href="https://whiskymine.com"><img src="https://raw.githubusercontent.com/SommsWell/sommelierevents/main/logos/logo1.png" alt="Sommelier 1"></a></div>
+        <div class="logo-item"><a href="https://wijsntroom.be"><img src="https://raw.githubusercontent.com/SommsWell/sommelierevents/main/logos/logo2.png" alt="Sommelier 2"></a></div>
+        <div class="logo-item"><a href="https://wildwines.be"><img src="https://raw.githubusercontent.com/SommsWell/sommelierevents/main/logos/logo3.png" alt="Sommelier 3"></a></div>
+        <div class="logo-item"><a href="https://hamatuswines.be"><img src="https://raw.githubusercontent.com/SommsWell/sommelierevents/main/logos/logo4.png" alt="Sommelier 4"></a></div>
+        <div class="logo-item"><a href="https://espavino.be"><img src="https://raw.githubusercontent.com/SommsWell/sommelierevents/main/logos/logo5.png" alt="Sommelier 5"></a></div>
+    </section>
+
+    <section class="catalog">
+        <h2>Onze Catalogus</h2>
+        <div class="booklet">
+            <iframe src="https://raw.githubusercontent.com/SommsWell/sommelierevents/main/catalog.pdf"></iframe>
+        </div>
+    </section>
+
+    <section class="map-section">
+        <h2>Onze Wijngebieden</h2>
+        <div id="world-map"></div>
+        <div class="map-legend">
+            <img src="https://raw.githubusercontent.com/SommsWell/sommelierevents/main/logos/logo1.png" onclick="highlightAreas('japan-scotland')" alt="Logo 1">
+            <img src="https://raw.githubusercontent.com/SommsWell/sommelierevents/logos/logo2.png" onclick="highlightAreas('loire')" alt="Logo 2">
+            <img src="https://raw.githubusercontent.com/SommsWell/sommelierevents/main/logos/logo3.png" onclick="highlightAreas('austria-italy')" alt="Logo 3">
+            <img src="https://raw.githubusercontent.com/SommsWell/sommelierevents/main/logos/logo4.png" onclick="highlightAreas('usa')" alt="Logo 4">
+            <img src="https://raw.githubusercontent.com/SommsWell/sommelierevents/main/logos/logo5.png" onclick="highlightAreas('spain')" alt="Logo 5">
+        </div>
+    </section>
+
+    <section class="contact">
+        <h2>Contacteer Ons</h2>
+        <p>Email: info@vijfsommeliers.be</p>
+        <p>Telefoon: +31 123 456 789</p>
+        <p>Adres: Dorpstraat 1, 3000 Leuven</p>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Vijf Sommeliers. Alle rechten voorbehouden.</p>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <script>
+        // Initialize Leaflet map
+        const map = L.map('world-map').setView([20, 0], 2);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Define wine regions
+        const regions = {
+            'japan-scotland': [
+                L.polygon([[35, 135], [45, 145], [30, 130]], {color: '#ff0000'}),
+                L.polygon([[55, -5], [60, -2], [50, -8]], {color: '#ff0000'}),
+                L.polygon([[51, -10], [55, -5], [50, -15]], {color: '#ff0000'}),
+                L.polygon([[15, -75], [20, -70], [10, -80]], {color: '#ff0000'})
+            ],
+            'loire': [L.polygon([[47, -1], [48, 1], [46, 0]], {color: '#00ff00'})],
+            'austria-italy': [
+                L.polygon([[47, 9], [49, 17], [46, 13]], {color: '#0000ff'}),
+                L.polygon([[46, 10], [48, 12], [44, 11]], {color: '#0000ff'})
+            ],
+            'usa': [L.polygon([[30, -120], [50, -120], [40, -70]], {color: '#ff00ff'})],
+            'spain': [L.polygon([[36, -9], [43, -9], [40, 3]], {color: '#ffff00'})]
+        };
+
+        let currentLayers = [];
+
+        function highlightAreas(region) {
+            // Remove previous layers
+            currentLayers.forEach(layer => map.removeLayer(layer));
+            currentLayers = [];
+
+            // Add new layers
+            regions[region].forEach(layer => {
+                layer.addTo(map);
+                currentLayers.push(layer);
+            });
+        }
+    </script>
+</body>
+</html>
