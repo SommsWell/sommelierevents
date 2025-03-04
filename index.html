@@ -19,10 +19,9 @@
             overflow-x: hidden;
         }
 
-        /* Slider */
         .slider {
             position: relative;
-            height: 40vh; /* Smaller height */
+            height: 40vh;
             overflow: hidden;
         }
 
@@ -56,7 +55,6 @@
             100% { margin-left: -400%; }
         }
 
-        /* Logos Section */
         .logos {
             padding: 40px;
             display: grid;
@@ -72,14 +70,13 @@
         }
 
         .logo-item.large img {
-            max-width: 300px; /* Double size for logos 1, 2, 5 */
+            max-width: 300px;
         }
 
         .logo-item img:hover {
             transform: scale(1.1);
         }
 
-        /* Catalog */
         .catalog {
             padding: 40px;
             text-align: center;
@@ -94,13 +91,11 @@
             overflow: hidden;
         }
 
-        .booklet embed {
+        .booklet div {
             width: 100%;
             height: 100%;
-            border: none;
         }
 
-        /* Map */
         .map-section {
             padding: 40px;
             background: #1a1a1a;
@@ -109,7 +104,7 @@
         }
 
         #world-map {
-            width: 80%; /* Less wide */
+            width: 80%;
             height: 500px;
             background: #333;
             margin: 0 auto;
@@ -127,7 +122,6 @@
             cursor: pointer;
         }
 
-        /* Contact */
         .contact {
             padding: 40px;
             background: #fff;
@@ -165,7 +159,7 @@
     <section class="catalog">
         <h2>Onze Catalogus</h2>
         <div class="booklet">
-            <embed src="https://raw.githubusercontent.com/SommsWell/sommelierevents/main/catalog.pdf" type="application/pdf">
+            <div id="pdf-viewer"></div>
         </div>
     </section>
 
@@ -192,51 +186,86 @@
         <p>© 2025 Vijf Sommeliers. Alle rechten voorbehouden.</p>
     </footer>
 
+    <!-- Leaflet for Map -->
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+
+    <!-- PDF.js for Catalog -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
+
     <script>
-        // Initialize Leaflet map
-        const map = L.map('world-map').setView([20, 0], 2);
+        // Initialize Leaflet map with bounds to prevent repetition
+        const map = L.map('world-map', {
+            minZoom: 2,
+            maxZoom: 5,
+            maxBounds: [[-90, -180], [90, 180]], // Limit to one globe
+            maxBoundsViscosity: 1.0
+        }).setView([20, 0], 2);
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
+            attribution: '© OpenStreetMap contributors',
+            noWrap: true, // Prevent tile repetition
+            bounds: [[-90, -180], [90, 180]]
         }).addTo(map);
 
         // Define wine regions with fuller coverage
         const regions = {
             'japan-scotland': [
-                L.polygon([[30, 128], [45, 145], [30, 145], [25, 128]], {color: '#ff0000', fillOpacity: 0.5}), // Japan
-                L.polygon([[54, -8], [60, -8], [60, 0], [54, 0]], {color: '#ff0000', fillOpacity: 0.5}), // Scotland
-                L.polygon([[51, -10], [55, -10], [55, -5], [51, -5]], {color: '#ff0000', fillOpacity: 0.5}), // Ireland
-                L.polygon([[10, -85], [20, -85], [20, -70], [10, -70]], {color: '#ff0000', fillOpacity: 0.5}) // Caribbean
+                L.polygon([[30, 128], [45, 145], [30, 145], [25, 128]], {color: '#ff0000', fillOpacity: 0.5}),
+                L.polygon([[54, -8], [60, -8], [60, 0], [54, 0]], {color: '#ff0000', fillOpacity: 0.5}),
+                L.polygon([[51, -10], [55, -10], [55, -5], [51, -5]], {color: '#ff0000', fillOpacity: 0.5}),
+                L.polygon([[10, -85], [20, -85], [20, -70], [10, -70]], {color: '#ff0000', fillOpacity: 0.5})
             ],
             'loire': [
                 L.polygon([[46.5, -2], [48.5, -2], [48.5, 1.5], [46.5, 1.5]], {color: '#00ff00', fillOpacity: 0.5})
             ],
             'austria-italy': [
-                L.polygon([[46, 9], [49, 9], [49, 17], [46, 17]], {color: '#0000ff', fillOpacity: 0.5}), // Austria
-                L.polygon([[44, 7], [46, 7], [46, 12], [44, 12]], {color: '#0000ff', fillOpacity: 0.5}) // North Italy
+                L.polygon([[46, 9], [49, 9], [49, 17], [46, 17]], {color: '#0000ff', fillOpacity: 0.5}),
+                L.polygon([[44, 7], [46, 7], [46, 12], [44, 12]], {color: '#0000ff', fillOpacity: 0.5})
             ],
             'usa': [
-                L.polygon([[24, -125], [50, -125], [50, -66], [24, -66]], {color: '#ff00ff', fillOpacity: 0.5}) // Fuller USA
+                L.polygon([[24, -125], [50, -125], [50, -66], [24, -66]], {color: '#ff00ff', fillOpacity: 0.5})
             ],
             'spain': [
-                L.polygon([[35, -10], [44, -10], [44, 3], [35, 3]], {color: '#ffff00', fillOpacity: 0.5}) // Fuller Spain
+                L.polygon([[35, -10], [44, -10], [44, 3], [35, 3]], {color: '#ffff00', fillOpacity: 0.5})
             ]
         };
 
         let currentLayers = [];
 
         function highlightAreas(region) {
-            // Remove previous layers
             currentLayers.forEach(layer => map.removeLayer(layer));
             currentLayers = [];
-
-            // Add new layers
             regions[region].forEach(layer => {
                 layer.addTo(map);
                 currentLayers.push(layer);
             });
         }
+
+        // Load PDF with PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js';
+        const url = 'https://raw.githubusercontent.com/SommsWell/sommelierevents/main/catalog.pdf';
+        const loadingTask = pdfjsLib.getDocument(url);
+        loadingTask.promise.then(pdf => {
+            pdf.getPage(1).then(page => {
+                const scale = 1.5;
+                const viewport = page.getViewport({ scale });
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                document.getElementById('pdf-viewer').appendChild(canvas);
+
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+                page.render(renderContext);
+            });
+        }).catch(err => {
+            console.error('PDF loading failed:', err);
+            document.getElementById('pdf-viewer').innerHTML = '<p>PDF laden mislukt. <a href="' + url + '">Download hier</a></p>';
+        });
     </script>
 </body>
 </html>
