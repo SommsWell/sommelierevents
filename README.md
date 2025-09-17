@@ -1,1 +1,2 @@
-https://sommswell.github.io/tasting2025/
+
+](https://sommswell.github.io/sommelierevents/)
